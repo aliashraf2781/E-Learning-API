@@ -1,14 +1,37 @@
 const Quiz = require("../models/quiz.model");
 const Course = require("../models/course.model");
 
-const createQuiz = async (req, res) => {
-  const quiz = new Quiz({ ...req.body, course: req.params.courseId });
+// const createQuiz = async (req, res) => {
+//   const quiz = new Quiz({ ...req.body, course: req.params.courseId });
 
+//   try {
+//     await quiz.save();
+//     res.status(201).send(quiz);
+//   } catch (error) {
+//     res.status(400).send(error);
+//   }
+// };
+
+const createQuiz = async (req, res) => {
   try {
+    // البحث عن الكورس
+    const course = await Course.findById(req.params.courseId);
+    if (!course) {
+      return res.status(404).send({ error: "Course not found" });
+    }
+
+    // إنشاء كويز جديد وربطه بالكورس
+    const quiz = new Quiz({ ...req.body, course: req.params.courseId });
     await quiz.save();
+
+    // إضافة الكويز إلى الكورس
+    course.quizzes.push(quiz._id);
+    await course.save();
+
     res.status(201).send(quiz);
   } catch (error) {
-    res.status(400).send(error);
+    console.error("❌ Error creating quiz:", error);
+    res.status(400).send({ error: "Error creating quiz" });
   }
 };
 

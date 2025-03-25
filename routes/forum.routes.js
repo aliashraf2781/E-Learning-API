@@ -5,6 +5,7 @@ const auth = require("../middlewares/auth");
 const commentRoutes = require("../routes/comment.routes");
 
 router.post("/", auth, forumController.createPost);
+router.get("/:forumId", forumController.getForumById);
 router.get("/", forumController.getPosts);
 router.get("/search", forumController.searchPosts);
 router.put("/:postId", auth, forumController.updatePost);

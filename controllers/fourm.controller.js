@@ -107,6 +107,24 @@ const acceptAnswer = async (req, res) => {
   }
 };
 
+const getForumById = async (req, res) => {
+  try {
+    const post = await ForumPost.findOne({
+      _id: req.params.forumId,
+      course: req.params.courseId, // تأكد أنه ينتمي لهذا الكورس
+    }).populate("createdBy", "name");
+
+    if (!post) {
+      return res.status(404).json({ message: "Forum post not found" });
+    }
+
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 module.exports = {
   createPost,
   getPosts,
@@ -114,4 +132,5 @@ module.exports = {
   updatePost,
   votePost,
   acceptAnswer,
+  getForumById,
 };
