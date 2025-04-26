@@ -43,7 +43,7 @@ const getCourseById = async (req, res) => {
 // Update course
 const updateCourse = async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ["title", "description"];
+  const allowedUpdates = ["title", "description", "price", "rate", "category","thumbnail"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
@@ -141,7 +141,7 @@ const uploadCourseMaterial = async (req, res) => {
 // Create course lesson
 const createLesson = async (req, res) => {
   const { courseId } = req.params;
-  const { title, content } = req.body;
+  const { title, content, path, summary } = req.body;
 
   try {
     const course = await Course.findById(courseId);
@@ -157,6 +157,8 @@ const createLesson = async (req, res) => {
     const lesson = new Lesson({
       title,
       content,
+      path,
+      summary,
       course: courseId,
     });
 
@@ -193,7 +195,7 @@ const getLesson = async (req, res) => {
 
 const updateLesson = async (req, res) => {
   const { courseId, lessonId } = req.params;
-  const { title, content } = req.body;
+  const { title, content, path } = req.body;
 
   try {
     const course = await Course.findById(courseId);
@@ -207,7 +209,7 @@ const updateLesson = async (req, res) => {
 
     const lesson = await Lesson.findOneAndUpdate(
       { _id: lessonId, course: courseId },
-      { title, content },
+      { title, content, path },
       { new: true, runValidators: true }
     );
 
@@ -252,6 +254,8 @@ const deleteLesson = async (req, res) => {
   }
 };
 
+
+
 const getCourseLessons = async (req, res) => {
   const { courseId } = req.params;
 
@@ -267,6 +271,9 @@ const getCourseLessons = async (req, res) => {
       description: course.description,
       createdBy: course.createdBy,
       lessons: course.lessons,
+      path: course.path,
+      summary: course.summary,
+
     };
 
     res.status(200).json(courseWithLessons);

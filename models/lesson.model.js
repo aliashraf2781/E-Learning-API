@@ -6,11 +6,25 @@ const lessonSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+
   content: {
     type: String,
     required: true,
     trim: true,
+
   },
+  path: {
+    type: String,
+    required: true,
+    trim: true,
+
+  },
+  summary: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",

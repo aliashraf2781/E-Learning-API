@@ -12,6 +12,8 @@ router.get("/", courseController.getCourses);
 router.get("/:id", courseController.getCourseById);
 router.patch("/:id", authorize("instructor"), courseController.updateCourse);
 router.delete("/:id", authorize("instructor"), courseController.deleteCourse);
+// get enrolled courses
+// router.get("/enrolled", authorize("student"), courseController.getEnrolledCourses);
 
 router.post(
   "/:id/enroll",

@@ -12,7 +12,11 @@ const forumRoutes = require("./routes/forum.routes");
 const progressRoutes = require("./routes/progress.routes");
 const badgeRoutes = require("./routes/badge.routes");
 const leaderboardRoutes = require("./routes/leaderboard.routes");
+
+
 const app = express();
+
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -28,6 +32,7 @@ app.use("/api/leaderboard", leaderboardRoutes);
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
+
 
 const path = require("path");
 
