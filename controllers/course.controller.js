@@ -282,6 +282,22 @@ const getCourseLessons = async (req, res) => {
   }
 };
 
+const getEnrolledCourses = async (req, res) => {
+  try {
+    const studentId = req.user._id;
+
+    const courses = await Course.find({
+      enrolledStudents: studentId,
+    });
+
+    res.status(200).json(courses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   createCourse,
   getCourses,
@@ -295,4 +311,5 @@ module.exports = {
   deleteLesson,
   getLesson,
   getCourseLessons,
+  getEnrolledCourses,
 };

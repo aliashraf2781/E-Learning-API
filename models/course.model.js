@@ -98,7 +98,7 @@ const courseSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Programming", "Design", "Marketing", "Business", "Other"],
+    enum: ["Arabic", "Mathematics", "Science", "English", "Social Studies", "Physics", "Chemistry", "Biology", "Philosophy and Logic", "Psychology and Sociology", "History", "Geography", "Computer Science"],
   },
   thumbnail: {
     type: String,
