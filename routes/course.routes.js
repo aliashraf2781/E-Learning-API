@@ -7,13 +7,19 @@ const router = new express.Router();
 
 router.use(auth);
 
+// get enrolled courses
+router.get(
+  "/mycourses",
+  authorize("student","Organization"),
+  courseController.getEnrolledCourses
+);
+
+
 router.post("/", authorize("instructor"), courseController.createCourse);
 router.get("/", courseController.getCourses);
 router.get("/:id", courseController.getCourseById);
 router.patch("/:id", authorize("instructor"), courseController.updateCourse);
 router.delete("/:id", authorize("instructor"), courseController.deleteCourse);
-// get enrolled courses
-// router.get("/enrolled", authorize("student"), courseController.getEnrolledCourses);
 
 router.post(
   "/:id/enroll",
