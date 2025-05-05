@@ -14,9 +14,19 @@ const createCourse = async (req, res) => {
 };
 
 // Get all courses
+// const getCourses = async (req, res) => {
+//   try {
+//     const courses = await Course.find({});
+//     res.status(200).send(courses);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// };
+
 const getCourses = async (req, res) => {
   try {
-    const courses = await Course.find({});
+    // استخدم populate علشان تجيب الدروس المرتبطة بكل كورس
+    const courses = await Course.find({}).populate('lessons');
     res.status(200).send(courses);
   } catch (error) {
     res.status(500).send(error);
