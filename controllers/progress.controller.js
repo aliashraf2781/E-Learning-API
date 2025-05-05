@@ -131,7 +131,7 @@ exports.markLessonAsComplete = async (req, res) => {
         user.points += 10;
         await user.save();
 
-        await checkAndAwardBadge(user._id);
+        // await checkAndAwardBadge(user._id);
       }
     } else {
       progress = new Progress({
@@ -144,7 +144,7 @@ exports.markLessonAsComplete = async (req, res) => {
       user.points += 10;
       await user.save();
 
-      await checkAndAwardBadge(user._id);
+      // await checkAndAwardBadge(user._id);
     }
 
     // ✅ Check if course is 100% complete
@@ -152,24 +152,30 @@ exports.markLessonAsComplete = async (req, res) => {
     const completedCount = progress.completedLessons.length;
     const percentage = Math.round((completedCount / totalLessons) * 100);
 
-    if (percentage === 100) {
-      // const alreadyExists = await Certificate.findOne({ userId, courseId });
+if (percentage === 100) {
+  // const alreadyExists = await Certificate.findOne({ userId, courseId });
+  if (!false) {
+    // const fileName = `${userName.replace(/\s+/g, "_")}_${courseTitle.replace(/\s+/g, "_")}`;
+    const fileName = `${user.name.replace(/\s+/g, "_")}_${course.title.replace(/\s+/g, "_")}`;
+    const outputDir = path.join(__dirname, "../certificates");
 
-      if (true) {
-        const fileName = `${user._id}_${course._id}_certificate.pdf`;
-        const filePath = path.join(__dirname, "../certificates", fileName);
+    const { pdfPath, imgPath } = await generateCertificateFromHTML(
+      user.name,
+      course.title,
+      outputDir
+    );
 
-        await generateCertificateFromHTML(user.name, course.title, filePath);
+    const newCertificate = new Certificate({
+      userId,
+      courseId,
+      certificateUrl: `https://rat-intent-hideously.ngrok-free.app/certificates/${fileName}.pdf`,
+      certificateImageUrl: `https://rat-intent-hideously.ngrok-free.app/certificates/${fileName}.png`,
+    });
 
-        const newCertificate = new Certificate({
-          userId,
-          courseId,
-          certificateUrl: `https://rat-intent-hideously.ngrok-free.app/certificates/${fileName}`,
-        });
+    await newCertificate.save();
+  }
+}
 
-        await newCertificate.save();
-      }
-    }
 
     res.status(200).json({ message: "Lesson marked as complete" });
   } catch (error) {

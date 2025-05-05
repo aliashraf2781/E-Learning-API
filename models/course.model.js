@@ -81,7 +81,11 @@ const courseSchema = new mongoose.Schema({
   lessons: [
     {
       type: mongoose.Schema.Types.ObjectId,
+      
       ref: "Lesson",
+    // return the lesson not the lessons id
+
+    
     },
   ],
   price: {
