@@ -5,11 +5,7 @@ const certificateSchema = new mongoose.Schema({
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
     issueDate: { type: Date, default: Date.now },
     certificateUrl: { type: String },
-    certificateImageUrl: { type: String }, // ✅ ده اللي ضفناه
+    certificateImageUrl: { type: String },
   });
 
 module.exports = mongoose.model("Certificate", certificateSchema);
-
-
-
-  
