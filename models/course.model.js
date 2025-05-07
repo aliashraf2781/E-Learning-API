@@ -31,6 +31,7 @@ const courseSchema = new mongoose.Schema({
   materials: [
     {
       type: String,
+      
     },
   ],
   lessons: [
