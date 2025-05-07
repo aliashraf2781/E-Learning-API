@@ -23,11 +23,53 @@ const createCourse = async (req, res) => {
 //   }
 // };
 
+// const getCourses = async (req, res) => {
+//   try {
+//     // استخدم populate علشان تجيب الدروس المرتبطة بكل كورس
+//     const courses = await Course.find({}).populate('lessons');
+//     res.status(200).send(courses);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// };
+
+// // Get course by ID
+// const getCourseById = async (req, res) => {
+//   const _id = req.params.id;
+
+//   try {
+//     const course = await Course.findOne({ _id });
+
+//     if (!course) {
+//       return res.status(404).send({ error: "Course not found." });
+//     }
+
+//     res.status(200).send(course);
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// };
+
+
+const baseUrl = "https://rat-intent-hideously.ngrok-free.app/";
+
+// Get all courses
 const getCourses = async (req, res) => {
   try {
-    // استخدم populate علشان تجيب الدروس المرتبطة بكل كورس
     const courses = await Course.find({}).populate('lessons');
-    res.status(200).send(courses);
+
+    // نعدل روابط الملفات داخل كل كورس
+    const updatedCourses = courses.map(course => {
+      const courseObj = course.toObject();
+      if (Array.isArray(courseObj.materials)) {
+        courseObj.materials = courseObj.materials.map(path =>
+          'https://rat-intent-hideously.ngrok-free.app/' + path.replace(/\\/g, "/")
+        );
+      }
+      return courseObj;
+    });
+
+    res.status(200).send(updatedCourses);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -44,11 +86,19 @@ const getCourseById = async (req, res) => {
       return res.status(404).send({ error: "Course not found." });
     }
 
-    res.status(200).send(course);
+    const courseObj = course.toObject();
+    if (Array.isArray(courseObj.materials)) {
+      courseObj.materials = courseObj.materials.map(path =>
+        baseUrl + path.replace(/\\/g, "/")
+      );
+    }
+
+    res.status(200).send(courseObj);
   } catch (error) {
     res.status(500).send(error);
   }
 };
+
 
 // Update course
 const updateCourse = async (req, res) => {
@@ -141,7 +191,8 @@ const uploadCourseMaterial = async (req, res) => {
 
     res.status(201).send({
       message: "Course material uploaded successfully",
-      path: req.file.path,
+      path: `https://rat-intent-hideously.ngrok-free.app/${req.file.path}`,
+      // path: req.file.path,
     });
   } catch (error) {
     res.status(500).send({ error: "Error uploading course material" });
