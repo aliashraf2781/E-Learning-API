@@ -63,7 +63,7 @@ const getCourses = async (req, res) => {
       const courseObj = course.toObject();
       if (Array.isArray(courseObj.materials)) {
         courseObj.materials = courseObj.materials.map(path =>
-          baseUrl + path.replace(/\\/g, "/")
+          'https://rat-intent-hideously.ngrok-free.app/' + path.replace(/\\/g, "/")
         );
       }
       return courseObj;
